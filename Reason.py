@@ -5,11 +5,9 @@ from collections import namedtuple
 
 # If the user didn't set the path to refmt correctly, at least guess that it's
 # here V
-# os.environ['PATH'] += '/usr/local/bin/'
+os.environ['PATH'] += ':/usr/local/bin/'
 
 # Portions Copyright (c) 2015-present, Facebook, Inc. All rights reserved.
-
-sublime.error_message("asdasdasd")
 
 ERROR_RE = re.compile(
     r'^File "(?P<file_name>.*)", line (?P<line>\d+), characters (?P<col>\d+)-\d+:$\r?\n'
@@ -30,7 +28,7 @@ def is_interface(file_name):
 
 def reason_command_line(file_name):
     settings = sublime.load_settings('Preferences.sublime-settings')
-    refmt = settings.get('refmt_bin', 'refmt')
+    refmt = settings.get('path_to_refmt', 'refmt')
 
     return [
         refmt,
@@ -44,7 +42,7 @@ class ReasonFormatCommand(sublime_plugin.TextCommand):
         settings = sublime.load_settings('Preferences.sublime-settings')
         max_width = str(settings.get('reason_max_width', 80))
         file_name = self.view.file_name();
-        # sublime.error_message(error)
+        refmt = settings.get('path_to_refmt', 'refmt')
 
         try:
             proc = Popen(reason_command_line(file_name) + [
@@ -52,9 +50,9 @@ class ReasonFormatCommand(sublime_plugin.TextCommand):
                 '--print-width', max_width,
             ], stdin=PIPE, stdout=PIPE, stderr=PIPE)
         except FileNotFoundError:
-            error = 'Can\'t find `%s` ($PATH=%s).\n\n' \
-                'You can set refmt binary in your settings (Cmd+,) ' \
-                'by adding "refmt_bin": "/a/b/c".' \
+            error = 'Can\'t find the Reason formatting binary `%s` ($PATH=%s).\n\n' \
+                'You can set it in your preferences (cmd+,) ' \
+                'by adding "path_to_refmt": "/path/to/it".' \
                 % (refmt, os.environ['PATH'])
             sublime.error_message(error)
             return

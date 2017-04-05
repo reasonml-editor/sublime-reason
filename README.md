@@ -15,7 +15,7 @@ plugin as well - language syntax and this plugin will be evolved together.
 In your Sublime Text preferances (`Cmd+,` on Mac) you can add
 
 ```json
-"refmt_bin": "/Users/frantic/.opam/4.02.1/bin/refmt",
+"path_to_refmt": "/Users/your_name/.opam/4.02.3/bin/refmt",
 "reason_max_width": 80,
 ```
 
