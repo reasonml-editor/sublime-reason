@@ -1,6 +1,6 @@
 <snippet>
   <content><![CDATA[
-switch ${1:subject} {
+switch (${1:subject}) {
   | ${2:option1} => ${3:expression}
   ${4:| ${5:option2} => ${6:expression}}
 }

@@ -1,6 +1,6 @@
 <snippet>
   <content><![CDATA[
-let module ${1:Name} = {
+module ${1:Name} = {
   ${2:/* Module contents */}
 };
 ]]></content>

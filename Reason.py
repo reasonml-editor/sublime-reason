@@ -3,7 +3,13 @@ import sublime, sublime_plugin
 from subprocess import Popen, PIPE
 from collections import namedtuple
 
+# If the user didn't set the path to refmt correctly, at least guess that it's
+# here V
+# os.environ['PATH'] += '/usr/local/bin/'
+
 # Portions Copyright (c) 2015-present, Facebook, Inc. All rights reserved.
+
+sublime.error_message("asdasdasd")
 
 ERROR_RE = re.compile(
     r'^File "(?P<file_name>.*)", line (?P<line>\d+), characters (?P<col>\d+)-\d+:$\r?\n'
@@ -38,6 +44,7 @@ class ReasonFormatCommand(sublime_plugin.TextCommand):
         settings = sublime.load_settings('Preferences.sublime-settings')
         max_width = str(settings.get('reason_max_width', 80))
         file_name = self.view.file_name();
+        # sublime.error_message(error)
 
         try:
             proc = Popen(reason_command_line(file_name) + [
