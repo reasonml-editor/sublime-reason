@@ -35,6 +35,8 @@ it will try to interpret '\\(' as a JSON escape code (which doesn't exist).
 
 ## Credits
 
+This repo was forked from the MIT licensed [sublime-rust](https://github.com/jhasse/sublime-rust).
+
 Created 2012 by [Daniel Patterson](mailto:dbp@riseup.net), as a near complete
 from scratch rewrite of a package by [Felix
 Martini](https://github.com/fmartini).
