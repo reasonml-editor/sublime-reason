@@ -4,22 +4,20 @@
 
 Soft prerequisite: for the inline error reporting system, you'll need [SublimeLinter](http://www.sublimelinter.com/en/latest/).
 
-When Reason is public, this plugin can go on Package Control.
-
-For now, you must copy this plugin into your Sublime Packag directory. Anytime
-you upgrad/reclone/rebuild Reason, you should make sure to upgrade this Sublime
-plugin as well - language syntax and this plugin will be evolved together.
+We're currently working with https://github.com/cynddl/sublime-text-merlin to
+see whether our repos can be merged. In the meantime, you can do `Package
+Control: Add Repository` in Sublime's command palette and add this URL.
 
 ## Configuration
 
-In your Sublime Text preferances (`Cmd+,` on Mac) you can add
+In your Sublime Text preferences (`Cmd+,` on Mac) you can add
 
 ```json
 "path_to_refmt": "/Users/your_name/.opam/4.02.3/bin/refmt",
 "reason_max_width": 80,
 ```
 
-## Development
+## Contribution
 
 The files are written in the JSON format supported by the Sublime Text package
 [AAAPackageDev](https://github.com/SublimeText/AAAPackageDev), because the
@@ -32,7 +30,7 @@ should just be able to trigger the build (F7) and get the corresponding
 formatted the file correctly.
 
 One impact of using this indirect format is that you usually have to double
-escape anything in the match patterns, ie, "\\(" has to be "\\\\(" as otherwise
+escape anything in the match patterns, i.e., "\\(" has to be "\\\\(" as otherwise
 it will try to interpret '\\(' as a JSON escape code (which doesn't exist).
 
 ## Credits
