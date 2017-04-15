@@ -26,26 +26,18 @@ def is_interface(file_name):
     else:
         raise Exception('Not a reason file: {}'.format(file_name))
 
-def reason_command_line(file_name):
-    settings = sublime.load_settings('Preferences.sublime-settings')
-    refmt = settings.get('path_to_refmt', 'refmt')
-
-    return [
-        refmt,
-        '--parse', 're',
-        '--interface', is_interface(file_name),
-        file_name
-    ]
-
 class ReasonFormatCommand(sublime_plugin.TextCommand):
     def run(self, edit):
         settings = sublime.load_settings('Preferences.sublime-settings')
-        max_width = str(settings.get('reason_max_width', 80))
+        max_width = str(settings.get('reason_max_width', 100))
         file_name = self.view.file_name();
         refmt = settings.get('path_to_refmt', 'refmt')
 
         try:
-            proc = Popen(reason_command_line(file_name) + [
+            proc = Popen([
+                refmt,
+                '--parse', 're',
+                '--interface', is_interface(file_name),
                 '--print', 're',
                 '--print-width', max_width,
             ], stdin=PIPE, stdout=PIPE, stderr=PIPE)
@@ -93,4 +85,11 @@ class Reason(Linter):
     line_col_base = (1, 0)
 
     def cmd(self):
-        return reason_command_line(self.view.file_name()) + ['--print', 'none']
+        settings = sublime.load_settings('Preferences.sublime-settings')
+        return [
+            settings.get('path_to_refmt', 'refmt'),
+            '--parse', 're',
+            '--interface', is_interface(file_name),
+            self.view.file_name(),
+            '--print', 'none'
+        ]
