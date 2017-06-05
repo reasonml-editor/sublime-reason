@@ -85,6 +85,7 @@ class Reason(Linter):
     line_col_base = (1, 0)
 
     def cmd(self):
+        file_name = self.view.file_name();
         settings = sublime.load_settings('Preferences.sublime-settings')
         return [
             settings.get('path_to_refmt', 'refmt'),
