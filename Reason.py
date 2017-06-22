@@ -10,9 +10,9 @@ os.environ['PATH'] += ':/usr/local/bin/'
 # Portions Copyright (c) 2015-present, Facebook, Inc. All rights reserved.
 
 ERROR_RE = re.compile(
-    r'^File "(?P<file_name>.*)", line (?P<line>\d+), characters (?P<col>\d+)-\d+:$\r?\n'
+    r'^File "(?P<file_name>.*?)", line (?P<line>\d+), characters (?P<col>\d+)-\d+:$\r?\n'
     r'^Error: (?P<message>.+)$',
-    re.MULTILINE
+    re.MULTILINE|re.DOTALL
 )
 
 def is_interface(file_name):
