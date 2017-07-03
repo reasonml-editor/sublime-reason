@@ -6,7 +6,7 @@ Soft prerequisite: for the inline error reporting system, you'll need [SublimeLi
 
 We're currently working with https://github.com/cynddl/sublime-text-merlin to
 see whether our repos can be merged. In the meantime, you can do `Package
-Control: Add Repository` in Sublime's command palette and add `https://github.com/chenglou/sublime-reason.git`.
+Control: Add Repository` in Sublime's command palette and add `https://github.com/reasonml-editor/sublime-reason.git`.
 
 ## Configuration
 
