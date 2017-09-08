@@ -12,14 +12,7 @@ Other prerequisites:
 
 - Install [SublimeLinter](http://www.sublimelinter.com/en/latest/)
 - Install [LSP](https://github.com/tomv564/LSP)
-- Install [ocaml-language-server](https://github.com/freebroccolo/ocaml-language-server) master, like so:
-
-```sh
-git clone https://github.com/freebroccolo/ocaml-language-server.git
-cd ocaml-language-server
-npm install
-npm install -g .
-```
+- Install [ocaml-language-server](https://github.com/freebroccolo/ocaml-language-server) through `npm install -g ocaml-language-server`
 
 Then, go to Command Palette again, and go to `Preferences: LSP Settings` and paste the following:
 
