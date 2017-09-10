@@ -10,7 +10,6 @@ To install this plugin:
 
 Other prerequisites:
 
-- Install [SublimeLinter](http://www.sublimelinter.com/en/latest/)
 - Install [LSP](https://github.com/tomv564/LSP)
 - Install [ocaml-language-server](https://github.com/freebroccolo/ocaml-language-server) through `npm install -g ocaml-language-server`
 
