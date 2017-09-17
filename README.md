@@ -7,6 +7,7 @@ To install this plugin:
 - Go to Command Palette (cmd-shift-p)
 - Search `Package Control: Add Repository`
 - Add `https://github.com/reasonml-editor/sublime-reason.git`
+- Then do the normal `Package Control: Install Package` and install sublime-reason.
 
 Other prerequisites:
 
