@@ -14,23 +14,6 @@ Other prerequisites:
 - Install [LSP](https://github.com/tomv564/LSP)
 - Install [ocaml-language-server](https://github.com/freebroccolo/ocaml-language-server) through `npm install -g ocaml-language-server`
 
-Then, go to Command Palette again, and go to `Preferences: LSP Settings` and paste the following:
-
-```json
-{
-  "clients": {
-    "reason": {
-      "command": ["ocaml-language-server", "--stdio"],
-      "scopes": ["source.reason", "source.ocaml"],
-      "syntaxes": ["Packages/sublime-reason/Reason.tmLanguage"],
-      "languageId": "reason"
-    }
-  }
-}
-```
-
-And you should be ready to go! These installs are admittingly slightly manual right now; we'll automate a bit more of them in the future.
-
 ## Configuration
 
 **This plugin has the right defaults**. You don't need to touch them unless you know what you're doing.
