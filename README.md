@@ -20,11 +20,4 @@ Other prerequisites:
 
 ## Configuration
 
-**This plugin has the right defaults**. You don't need to touch them unless you know what you're doing.
-
-In your Sublime Text preferences (`Cmd+,` on Mac) you can add
-
-```json
-"path_to_refmt": "/path/to/refmt",
-"reason_max_width": 100,
-```
+**Nothing**. Sublime's LSP above has built-in OCaml/Reason support. But you might want to set up some shorcuts for common actions. See them [here](https://lsp.readthedocs.io/en/latest/#features).
