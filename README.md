@@ -1,5 +1,9 @@
 # Sublime Text package for [Reason](https://github.com/facebook/reason)
 
+## Features
+
+This plugin simply uses our [language server](https://github.com/freebroccolo/ocaml-language-server#server-capabilities). Every feature is supported. Additionally, we provide the basics: snippets and syntax highlighting.
+
 ## Installation (Sublime Text 3)
 
 To install this plugin:
