@@ -20,4 +20,39 @@ Other prerequisites:
 
 ## Configuration
 
-**Nothing**. Sublime's LSP above has built-in OCaml/Reason support. But you might want to set up some shorcuts for common actions. See them [here](https://lsp.readthedocs.io/en/latest/#features).
+**Nothing**. Sublime's LSP above has built-in OCaml/Reason support. But you might want to set up some keyboard shorcuts for common actions. See them [here](https://lsp.readthedocs.io/en/latest/#features). They're exposed as [these functions](https://github.com/tomv564/LSP/blob/604df779ee63daa1c008b9e1b12169a61f4007ea/Menus/Context.sublime-menu).
+
+Our recommendations:
+
+- Go to Command Palette (`cmd-shift-p`) -> Preferences: Key Bindings
+- Add the following to your configuration:
+
+  ```json
+  [
+    // ...whatevever config you had before
+    {
+      "keys": ["super+alt+enter"],
+      "command": "lsp_symbol_definition",
+      "context": [
+        {
+          "key": "selector",
+          "operator": "equal",
+          "operand": ["source.reason", "source.ocaml"]
+        }
+      ]
+    },
+    {
+      "keys": ["super+shift+c"],
+      "command": "lsp_format_document",
+      "context": [
+        {
+            "key": "selector",
+            "operator": "equal",
+            "operand": ["source.reason"]
+        }
+      ]
+    }
+  ]
+  ```
+
+  (`super` means `command` on macOS) so you can do e.g. `cmd-shift-c` to format your Reason files.
