@@ -6,12 +6,9 @@ This plugin simply uses our [language server](https://github.com/freebroccolo/oc
 
 ## Installation (Sublime Text 3)
 
-To install this plugin:
-
-- Go to Command Palette (cmd-shift-p)
-- Search `Package Control: Add Repository`
-- Add `https://github.com/reasonml-editor/sublime-reason.git`
-- Then do the normal `Package Control: Install Package` and install sublime-reason.
+- Go to Sublime Text -> Preferences -> Browse Packages
+- In the terminal, `cd` into that folder (if you're on macOS, you can click & drag the folder icon into your terminal window)
+- `git clone https://github.com/reasonml-editor/sublime-reason`
 
 Other prerequisites:
 
