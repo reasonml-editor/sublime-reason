@@ -1,37 +1,25 @@
 # Sublime Text package for [Reason](https://github.com/facebook/reason)
 
-## Features
+To have the complete Sublime Text Reason experience, there are two plugins to install: this one, and [language-server](https://github.com/jaredly/reason-language-server).
 
-This plugin provides syntax highlight and snippets for Reason.
+This one provides syntax highlight, snippets for Reason and allows related features to recognize the Reason syntax.
 
-All other Reason editor functionalities are independently provided by our [language server](https://github.com/freebroccolo/ocaml-language-server#server-capabilities).
-
-Both installations instructions are below.
+Language-server provides all the others (autocompletion, type hint, jump-to-definition, etc.).
 
 ## This Plugin's Installation
 
-- Go to Sublime Text -> Preferences -> Browse Packages
-- In the terminal, `cd` into that folder (if you're on macOS, you can click & drag the folder icon into your terminal window)
-- `git clone https://github.com/reasonml-editor/sublime-reason`
+The plugin's [published on Package Control](https://packagecontrol.io/packages/Reason).
+
+- Go to Command Palette (`cmd-shift-p`) -> Package Control: Install Package.
+- Choose sublime-reason.
 
 ## Language Server Installation
 
-The other 90% of Reason's editor experience (intelligent autocompletion, type hint, formatting, jump-to-definition, etc.) is provided by ocaml-language-server (a code analysis backend shared by all editors).
+See https://github.com/jaredly/reason-language-server#sublime-text for language-server installation and configuration.
 
-> **Heads Up!**
-> `nodenv` is known to cause various issues so make sure to install an npm package with the system version of Node
+### Bonus Language Server Configuration
 
-- Install the [global binaries](https://reasonml.github.io/docs/en/global-installation.html).
-- Install [ocaml-language-server](https://github.com/freebroccolo/ocaml-language-server) itself through `npm install -g ocaml-language-server`.
-- Install [LSP](https://github.com/tomv564/LSP), the sublime text plugin that communicates with ocaml-language-server.
-
-Restart sublime after installing these.
-
-### Language Server Configuration
-
-**Nothing**. Sublime's LSP above has built-in OCaml/Reason support. But you might want to set up some keyboard shorcuts for common actions. See them [here](https://lsp.readthedocs.io/en/latest/#features). They're exposed as [these functions](https://github.com/tomv564/LSP/blob/604df779ee63daa1c008b9e1b12169a61f4007ea/Menus/Context.sublime-menu).
-
-Our recommendations:
+In addition to the installation & configuration above, you might want to set some extra keyboard shortcuts.
 
 - Go to Command Palette (`cmd-shift-p`) -> Preferences: Key Bindings
 - Add the following to your configuration:
@@ -46,7 +34,7 @@ Our recommendations:
         {
           "key": "selector",
           "operator": "equal",
-          "operand": ["source.reason", "source.ocaml"]
+          "operand": ["source.reason"]
         }
       ]
     },
@@ -64,4 +52,6 @@ Our recommendations:
   ]
   ```
 
-  (`super` means `command` on macOS) so you can do e.g. `cmd-shift-c` to format your Reason files.
+`super` means `command` on macOS, so you can do e.g. `cmd-shift-c` to format your Reason files.
+
+[Here](https://github.com/tomv564/LSP/blob/master/Menus/Context.sublime-menu) are all the `command`s you can assign shortcuts to.
