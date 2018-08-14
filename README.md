@@ -17,6 +17,8 @@ The plugin's [published on Package Control](https://packagecontrol.io/packages/R
 
 See https://github.com/jaredly/reason-language-server#sublime-text for language-server installation and configuration.
 
+If you're doing native development, instead of reason-language-server, you can try [ocaml-language-server](https://github.com/freebroccolo/ocaml-language-server#installation-1).
+
 ### Bonus Language Server Configuration
 
 In addition to the installation & configuration above, you might want to set some extra keyboard shortcuts.
