@@ -25,6 +25,10 @@
 		</dict>
 		<dict>
 			<key>include</key>
+			<string>#reason_comment</string>
+		</dict>
+		<dict>
+			<key>include</key>
 			<string>#reason_named_arg</string>
 		</dict>
 		<dict>
@@ -338,6 +342,15 @@
 	</array>
 	<key>repository</key>
 	<dict>
+		<key>reason_comment</key>
+		<dict>
+			<key>begin</key>
+			<string>//</string>
+			<key>end</key>
+			<string>(?=^)</string>
+			<key>name</key>
+			<string>comment.source.reason</string>
+		</dict>
 		<key>reason_comment_block</key>
 		<dict>
 			<key>begin</key>
