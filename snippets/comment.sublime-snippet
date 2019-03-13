@@ -1,11 +1,9 @@
 
 <snippet>
   <content>
-  	<![CDATA[/*
- * $0
- */]]>
+  	<![CDATA[// $0]]>
   </content>
   <scope>source.reason</scope>
   <tabTrigger>cmt</tabTrigger>
-  <description>/* Comment */</description>
+  <description>// Comment</description>
 </snippet>
