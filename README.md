@@ -57,3 +57,11 @@ In addition to the installation & configuration above, you might want to set som
 `super` means `command` on macOS, so you can do e.g. `cmd-shift-c` to format your Reason files.
 
 [Here](https://github.com/tomv564/LSP/blob/master/Menus/Context.sublime-menu) are all the `command`s you can assign shortcuts to.
+
+# Develop This Package
+
+Thanks for the help!
+
+To test this package locally, do `Preferences: Browse Packages` and symlink this repo into `Packages/User`. Disable the existing Reason package, if any.
+
+Install [PackageDev](https://github.com/SublimeText/PackageDev), change whichever JSON file in the repo, then call `PackageDev: Convert ...` from the command palette and convert the file into the corresponding XML files.
