@@ -3,7 +3,7 @@
 <plist version="1.0">
 <dict>
 	<key>name</key>
-	<string>Reason Symbols</string>
+	<string>Symbols</string>
 	<key>scope</key>
 	<string>meta.initialization.reason</string>
 	<key>settings</key>
