@@ -9,7 +9,7 @@ Testing some tweaks. Ignore
 ## Config
 
 - Cmd-shift-p -> UI: Select Color Scheme. Use Mariana for best effects. Or try another one and tell me
-- Open this repo's `Default.sublime-settings`, put in the absolute path to the formatter exe in formatterLocation
+- Open this repo's `Default.sublime-settings`, put in the absolute path to the formatter exe in `optionalGlobalFormatter`
 
 To format: cmd-shift-r
 
