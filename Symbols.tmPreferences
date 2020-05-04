@@ -5,7 +5,7 @@
 	<key>name</key>
 	<string>Symbols</string>
 	<key>scope</key>
-	<string>meta.initialization.reason</string>
+	<string>entity.name.namespace</string>
 	<key>settings</key>
 	<dict>
 		<key>showInSymbolList</key>
