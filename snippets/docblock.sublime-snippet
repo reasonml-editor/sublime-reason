@@ -5,7 +5,7 @@
  * $0
  */]]>
   </content>
-  <scope>source.reason</scope>
+  <scope>source.ml</scope>
   <tabTrigger>docb</tabTrigger>
   <description>/** Docblock */</description>
 </snippet>

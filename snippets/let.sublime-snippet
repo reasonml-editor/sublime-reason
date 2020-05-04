@@ -2,9 +2,9 @@
 
 <snippet>
   <content>
-  	<![CDATA[let ${1:pattern} = $0;]]>
+  	<![CDATA[let ${1:pattern} = $0]]>
   </content>
-  <scope>source.reason</scope>
+  <scope>source.ml</scope>
   <tabTrigger>lt</tabTrigger>
   <description>let x = …;</description>
 </snippet>

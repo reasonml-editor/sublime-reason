@@ -3,7 +3,7 @@
   <content>
   	<![CDATA[// $0]]>
   </content>
-  <scope>source.reason</scope>
+  <scope>source.ml</scope>
   <tabTrigger>cmt</tabTrigger>
   <description>// Comment</description>
 </snippet>

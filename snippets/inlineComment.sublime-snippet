@@ -2,7 +2,7 @@
   <content>
   	<![CDATA[/* $0 */]]>
   </content>
-  <scope>source.reason</scope>
+  <scope>source.ml</scope>
   <tabTrigger>ic</tabTrigger>
   <description>/* inline Comment */</description>
 </snippet>

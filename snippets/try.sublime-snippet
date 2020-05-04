@@ -1,9 +1,11 @@
 <snippet>
   <content><![CDATA[
-try (${1:expression}) {
+try {
+  ${1:expression}
+} catch {
 | ${2:MyException} => ${3:expression}
 }
 ]]></content>
   <tabTrigger>try</tabTrigger>
-  <scope>source.reason</scope>
+  <scope>source.ml</scope>
 </snippet>

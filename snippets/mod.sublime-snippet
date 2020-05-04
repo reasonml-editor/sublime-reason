@@ -2,8 +2,8 @@
   <content><![CDATA[
 module ${1:Name} = {
   ${2:/* Module contents */}
-};
+}
 ]]></content>
   <tabTrigger>mod</tabTrigger>
-  <scope>source.reason</scope>
+  <scope>source.ml</scope>
 </snippet>
