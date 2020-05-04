@@ -5,8 +5,13 @@ Testing some tweaks. Ignore
 - Clone repo locally, switch to this branch
 - Cmd-shift-p -> Preferences: Browse Packages
 - In terminal, `ln -s /path/to/your/cloned/repo ./`
-- Cmd-shift-p -> UI: Select Color Scheme
-- Use Mariana for best effects. Or try another one and tell me
+
+## Config
+
+- Cmd-shift-p -> UI: Select Color Scheme. Use Mariana for best effects. Or try another one and tell me
+- Open this repo's `Default.sublime-settings`, put in the absolute path to the formatter exe in formatterLocation
+
+To format: cmd-shift-r
 
 ## Test Syntax
 
