@@ -1,5 +1,0 @@
-// These settings override both User and Default settings for the Reason syntax
-{
-  "auto_complete_triggers": [ {"selector": "source.reason", "characters": "."} ],
-  "auto_complete_triggers": [ {"selector": "source.reason", "characters": "->"} ]
-}
