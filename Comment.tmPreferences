@@ -3,7 +3,7 @@
 <plist version="1.0">
 <dict>
 	<key>name</key>
-	<string>Reason Comments</string>
+	<string>Comments</string>
 	<key>scope</key>
 	<string>source.reason</string>
 	<key>settings</key>
