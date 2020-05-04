@@ -1,4 +1,4 @@
-{ "name": "Reason Comments",
+{ "name": "Comments",
   "scope": "source.reason",
   "settings": {
     "shellVariables": [{"name": "TM_COMMENT_START_2", "value": "// "},
