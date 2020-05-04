@@ -1,0 +1,9 @@
+<snippet>
+  <content><![CDATA[
+try (${1:expression}) {
+| ${2:MyException} => ${3:expression}
+}
+]]></content>
+  <tabTrigger>try</tabTrigger>
+  <scope>source.reason</scope>
+</snippet>
