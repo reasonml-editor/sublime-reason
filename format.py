@@ -6,6 +6,8 @@ import os
 
 SETTINGS_PATH = 'Default.sublime-settings'
 
+poorMansErrorParser = re.compile(r'(.*)\((\d+),(\d+)\):(.+)')
+
 def findBsConfigDirFromFilename(filename):
   currentDir = os.path.dirname(filename)
   while True:
@@ -18,8 +20,8 @@ def findBsConfigDirFromFilename(filename):
 
     currentDir = parentDir
 
-def findFormatter(self):
-  filename = self.view.file_name()
+def findFormatter(view):
+  filename = view.file_name()
   globalFormatterExe = sublime.load_settings(SETTINGS_PATH).get('optionalGlobalFormatter')
 
   if filename == None:
@@ -57,56 +59,71 @@ def findFormatter(self):
         sublime.error_message("Can't find the formatter % s"% formatterExe)
         return None
 
-class NsfmtCommand(sublime_plugin.TextCommand):
-  locRegex = re.compile(r'\s+File "(.*)", line (\d+), characters (\d+)-(\d+)')
+def runNsBinary(view, formatBuffer):
+  view.erase_regions("syntaxerror")
+  view.erase_phantoms("errns")
 
-  def run(self, edit):
-    self.view.erase_regions("syntaxerror")
-    self.view.erase_phantoms("errns")
-    # self.view.erase_regions("dead")
+  currentBuffer = sublime.Region(0, view.size())
+  contents = view.substr(currentBuffer)
 
-    # View = represents a view into a text buffer
-    # region = area of the buffer
-    currentBuffer = sublime.Region(0, self.view.size())
-    contents = self.view.substr(currentBuffer)
+  formatterExe = findFormatter(view)
+  if formatterExe == None:
+    return
 
-    formatterExe = findFormatter(self)
-    if formatterExe == None:
+  proc = subprocess.Popen(
+    [formatterExe, "-print", "ns", "-report", "plain"],
+    stdin=subprocess.PIPE,
+    stderr=subprocess.PIPE,
+    stdout=subprocess.PIPE,
+  )
+  stdout, stderr = proc.communicate(contents.encode())
+
+  if proc.returncode == 0 and formatBuffer:
+    self.view.replace(edit, currentBuffer, stdout.decode())
+  else:
+    errTxt = stderr.decode()
+    regions = []
+    phantoms = []
+
+    for line in errTxt.splitlines():
+      # test.ns(29,38):Did you forget to close this template expression with a backtick?
+      match = poorMansErrorParser.match(line)
+      if match == None:
+        # can't parse error... not sure why. Possible that it's a bad binary
+        sublime.error_message("An unknown error occurred during formatting:\n\n" + errTxt)
+      else:
+        # filename = match.group(1)
+        startCnum = int(match.group(2))
+        endCnum = int(match.group(3))
+        explanation = match.group(4)
+
+        region = sublime.Region(startCnum, endCnum)
+        regions.append(region)
+        html = '<body id="my-plugin-feature"> <style> div.error {padding: 5px; } </style> <div class="error">' + explanation +  '</div> </body>'
+        view.add_phantom("errns", region, html, sublime.LAYOUT_BELOW)
+
+
+    view.add_regions('syntaxerror', regions, 'invalid.illegal', 'dot', sublime.DRAW_NO_FILL)
+
+
+class NsListener(sublime_plugin.EventListener):
+  def on_post_save_async(self, view):
+    # Is this a napkin file?
+    if view.score_selector(0, 'source.ml') != 0:
+      runNsBinary(view, False) # only show syntax errors
+    else:
       return
 
-    proc = subprocess.Popen(
-      [formatterExe, "-print", "ns", "-report", "plain"],
-      stdin=subprocess.PIPE,
-      stderr=subprocess.PIPE,
-      stdout=subprocess.PIPE,
-    )
-    stdout, stderr = proc.communicate(contents.encode())
-
-    poorMansErrorParser = re.compile(r'(.*)\((\d+),(\d+)\):(.+)')
-
-    if proc.returncode == 0:
-      self.view.replace(edit, currentBuffer, stdout.decode())
+  def on_activated_async(self, view):
+    # Is this a napkin file?
+    if view.score_selector(0, 'source.ml') != 0:
+      runNsBinary(view, False) # only show syntax errors
     else:
-      errTxt = stderr.decode()
-      regions = []
-      # phantoms = []
-      # phantom_set = sublime.PhantomSet(self.view, "napkinsyntax")
+      return
 
-      for line in errTxt.splitlines():
-        # test.ns(29,38):Did you forget to close this template expression with a backtick?
-        match = poorMansErrorParser.match(line)
-        if match == None:
-          # can't parse error... not sure why. Possible that it's a bad binary
-          sublime.error_message("An unknown error occurred during formatting:\n\n" + errTxt)
-        else:
-          # filename = match.group(1)
-          startCnum = int(match.group(2))
-          endCnum = int(match.group(3))
-          explanation = match.group(4)
-
-          region = sublime.Region(startCnum, endCnum)
-          regions.append(region)
-          html = '<body id="my-plugin-feature"> <style> div.error {padding: 5px; } </style> <div class="error">' + explanation +  '</div> </body>'
-          self.view.add_phantom("errns", region, html, sublime.LAYOUT_BELOW)
-
-      self.view.add_regions('syntaxerror', regions, 'invalid.illegal', 'dot', sublime.DRAW_NO_FILL)
+class NsfmtCommand(sublime_plugin.TextCommand):
+  def run(self, edit):
+    if self.view.score_selector(0, 'source.ml') != 0: # check if valid source file
+      runNsBinary(self.view, True) # show syntax errors + format
+    else:
+      return
