@@ -72,10 +72,12 @@ let [c, [a, [1], list[a, ...rest],  c], 2.2] = [c, 1, "d", 'a', 1+2]
 
    type bla('a) = {
 // ^ source.ml storage.type
+//                ^ source.ml punctuation.section.braces.begin
   a: int,
      // ^ source.ml punctuation.separator
   ok: 'a,
-}
+   }
+// ^ source.ml punctuation.section.braces.end
 
 let getItem = (theList) =>
   if callSomeFunctionThatThrows() {
@@ -133,8 +135,12 @@ module Bla = Belt.Map.Make(Bar({type t let a:b = "cc"}))
 //     ^ source.ml entity.name.namespace
 //           ^ source.ml entity.name.namespace
 //                    ^ source.ml entity.name.namespace
+//                        ^ source.ml punctuation.section.braces.begin
 //                         ^ source.ml entity.name.namespace
+//                            ^ source.ml punctuation.section.braces.begin
 //                              ^ source.ml storage.type
+//                                                    ^ source.ml punctuation.section.braces.end
+//                                                     ^ source.ml punctuation.section.braces.end
 module SetOfIntPairs: Foo = MakeSet(IntPair)
 //                    ^ source.ml entity.name.namespace
 //                          ^ source.ml entity.name.namespace
@@ -208,7 +214,9 @@ module School = {
     module NestMore = Bla
     module NestMore: Foo = Bla
     module NestMore: {type t = Bar} = Bla
+//                   ^ source.ml punctuation.section.braces.begin
 //                             ^ source.ml
+//                                ^ source.ml punctuation.section.braces.end
 //                                    ^ source.ml entity.name.namespace
     module NestMore: {type t = Bar} = {
 //                             ^ source.ml

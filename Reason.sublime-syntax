@@ -45,6 +45,14 @@ contexts:
       scope: punctuation.separator
     - match: \|(?!\|)
       scope: punctuation.separator
+    - match: \{
+      scope: punctuation.section.braces.begin
+    - match: \}
+      scope: punctuation.section.braces.end
+    - match: \(
+      scope: punctuation.section.parens.begin
+    - match: \)
+      scope: punctuation.section.parens.end
 
   storage:
     - match: \btype\b
@@ -193,7 +201,9 @@ contexts:
   functorParameter:
     - match: \(
       push: functorParameter
+      scope: punctuation.section.braces.begin
     - match: \)
+      scope: punctuation.section.braces.end
       pop: true
     - include: moduleAccessEndsWithModule
     - include: main
@@ -222,21 +232,18 @@ contexts:
         - match: '\s*:\s*({{RE_MODULE_IDENT}})'
           captures:
             1: entity.name.namespace
-        - match: '\s*:\s*\{'
+        - match: '\s*:\s*(\{)'
           captures:
-            1: entity.name.namespace
+            1: punctuation.section.braces.begin
           push: moduleInner
         - match: '='
           set: moduleRHS
         - match: '(?=\S)'
           pop: true
 
-  moduleStart:
-    - match: \{
-      push: moduleInner
-
   moduleInner:
     - match: \}
+      scope: punctuation.section.braces.end
       pop: true
     - include: main
 
@@ -264,4 +271,3 @@ contexts:
     # this is different than reason-highlightjs too
     - include: keyword
     - include: punctuations
-    - include: moduleStart
