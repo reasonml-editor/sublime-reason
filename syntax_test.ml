@@ -9,14 +9,16 @@
 //       ^ source.ml comment.block
 
    "aa";
-// ^^^ source.ml string.quoted.double
+// ^ source.ml string.quoted.double punctuation.definition.string.begin
+//  ^^ source.ml string.quoted.double
+//    ^ source.ml string.quoted.double punctuation.definition.string.end
 //     ^ source.ml punctuation.terminator
 
    'a'
 // ^^^ source.ml string.quoted.single
 
    'ab'
-// ^^^ source.ml
+// ^^^^ source.ml
 
 exception Hello
 //        ^ source.ml
@@ -266,10 +268,14 @@ let jsx = <div className="foo">
 // Invalid tests
 let \"a b" = c
 let nope = `hi`
-//         ^^^^ source.ml string.quoted.other
+//         ^ source.ml string.quoted.other punctuation.definition.string.begin
+//          ^^ source.ml string.quoted.other
+//            ^ source.ml string.quoted.other punctuation.definition.string.end
 let nope2 = j`hi`
 //          ^ source.ml string.quoted.other variable.annotation
-//           ^^^^ source.ml string.quoted.other
+//           ^ source.ml string.quoted.other punctuation.definition.string.begin
+//            ^^ source.ml string.quoted.other
+//              ^ source.ml string.quoted.other punctuation.definition.string.end
 let variant = #foo
 //            ^ source.ml punctuation.definition.keyword
 type a = option<bar>

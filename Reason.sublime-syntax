@@ -68,19 +68,23 @@ contexts:
 
   string:
     - match: '"'
+      scope: punctuation.definition.string.begin
       push:
       - meta_scope: string.quoted.double
       - match: \\.
         scope: constant.character.escape
       - match: '"'
+        scope: punctuation.definition.string.end
         pop: true
-    - match: '({{RE_IDENT}})?`'
+    - match: '({{RE_IDENT}})?(`)'
       captures:
         1: variable.annotation
+        2: punctuation.definition.string.begin
       push:
         # different than reason-highlightjs, for now
         - meta_scope: string.quoted.other
         - match: '`'
+          scope: punctuation.definition.string.end
           pop: true
 
   function:
