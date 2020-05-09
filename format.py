@@ -61,13 +61,14 @@ def findFormatter(view):
 
 class FormatCommand(sublime_plugin.TextCommand):
   def run(self, edit):
-    self.view.erase_regions("syntaxerror")
-    self.view.erase_phantoms("errns")
+    view = self.view
+    view.erase_regions("syntaxerror")
+    view.erase_phantoms("errns")
 
-    currentBuffer = sublime.Region(0, self.view.size())
-    contents = self.view.substr(currentBuffer)
+    currentBuffer = sublime.Region(0, view.size())
+    contents = view.substr(currentBuffer)
 
-    formatterExe = findFormatter(self.view)
+    formatterExe = findFormatter(view)
     if formatterExe == None:
       return
 
@@ -81,7 +82,7 @@ class FormatCommand(sublime_plugin.TextCommand):
 
     # if proc.returncode == 0 and formatBuffer:
     if proc.returncode == 0:
-      self.view.replace(edit, currentBuffer, stdout.decode())
+      view.replace(edit, currentBuffer, stdout.decode())
     else:
       errTxt = stderr.decode()
       regions = []
@@ -120,5 +121,5 @@ packageName = 'Packages/sublime-reason/Reason.sublime-syntax'
 
 # class NsfmtCommand(sublime_plugin.TextCommand):
 #   def run(self, edit):
-#     if self.view.settings().get('syntax') == packageName:
+#     if view.settings().get('syntax') == packageName:
 #       view.run_command('reason_format')
