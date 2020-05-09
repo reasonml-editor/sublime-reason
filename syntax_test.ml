@@ -17,7 +17,7 @@
    'a'
 // ^^^ source.ml string.quoted.single
 
-   'ab'
+   // 'ab'
 // ^^^^ source.ml
 
 exception Hello

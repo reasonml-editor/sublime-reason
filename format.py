@@ -106,24 +106,20 @@ def runNsBinary(view, formatBuffer):
     view.add_regions('syntaxerror', regions, 'invalid.illegal', 'dot', sublime.DRAW_NO_FILL)
 
 
+packageName = 'Packages/sublime-reason/Reason.sublime-syntax'
+
 class NsListener(sublime_plugin.EventListener):
   def on_post_save_async(self, view):
     # Is this a napkin file?
-    if view.score_selector(0, 'source.ml') != 0:
+    if view.settings().get('syntax') == packageName:
       runNsBinary(view, False) # only show syntax errors
-    else:
-      return
 
   def on_activated_async(self, view):
     # Is this a napkin file?
-    if view.score_selector(0, 'source.ml') != 0:
+    if view.settings().get('syntax') == packageName:
       runNsBinary(view, False) # only show syntax errors
-    else:
-      return
 
 class NsfmtCommand(sublime_plugin.TextCommand):
   def run(self, edit):
-    if self.view.score_selector(0, 'source.ml') != 0: # check if valid source file
+    if self.view.settings().get('syntax') == packageName: # check if valid source file
       runNsBinary(self.view, True) # show syntax errors + format
-    else:
-      return
