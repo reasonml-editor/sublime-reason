@@ -59,51 +59,52 @@ def findFormatter(view):
         sublime.error_message("Can't find the formatter % s"% formatterExe)
         return None
 
-def runNsBinary(view, formatBuffer):
-  view.erase_regions("syntaxerror")
-  view.erase_phantoms("errns")
+class ReasonFormatCommand(sublime_plugin.TextCommand):
+  def run(self, edit):
+    self.view.erase_regions("syntaxerror")
+    self.view.erase_phantoms("errns")
 
-  currentBuffer = sublime.Region(0, view.size())
-  contents = view.substr(currentBuffer)
+    currentBuffer = sublime.Region(0, self.view.size())
+    contents = self.view.substr(currentBuffer)
 
-  formatterExe = findFormatter(view)
-  if formatterExe == None:
-    return
+    formatterExe = findFormatter(self.view)
+    if formatterExe == None:
+      return
 
-  proc = subprocess.Popen(
-    [formatterExe, "-print", "ns", "-report", "plain"],
-    stdin=subprocess.PIPE,
-    stderr=subprocess.PIPE,
-    stdout=subprocess.PIPE,
-  )
-  stdout, stderr = proc.communicate(contents.encode())
+    proc = subprocess.Popen(
+      [formatterExe, "-print", "ns", "-report", "plain"],
+      stdin=subprocess.PIPE,
+      stderr=subprocess.PIPE,
+      stdout=subprocess.PIPE,
+    )
+    stdout, stderr = proc.communicate(contents.encode())
 
-  if proc.returncode == 0 and formatBuffer:
-    self.view.replace(edit, currentBuffer, stdout.decode())
-  else:
-    errTxt = stderr.decode()
-    regions = []
-    phantoms = []
+    # if proc.returncode == 0 and formatBuffer:
+    if proc.returncode == 0:
+      self.view.replace(edit, currentBuffer, stdout.decode())
+    else:
+      errTxt = stderr.decode()
+      regions = []
+      phantoms = []
 
-    for line in errTxt.splitlines():
-      # test.ns(29,38):Did you forget to close this template expression with a backtick?
-      match = poorMansErrorParser.match(line)
-      if match == None:
-        # can't parse error... not sure why. Possible that it's a bad binary
-        sublime.error_message("An unknown error occurred during formatting:\n\n" + errTxt)
-      else:
-        # filename = match.group(1)
-        startCnum = int(match.group(2))
-        endCnum = int(match.group(3))
-        explanation = match.group(4)
+      for line in errTxt.splitlines():
+        # test.ns(29,38):Did you forget to close this template expression with a backtick?
+        match = poorMansErrorParser.match(line)
+        if match == None:
+          # can't parse error... not sure why. Possible that it's a bad binary
+          sublime.error_message("An unknown error occurred during formatting:\n\n" + errTxt)
+        else:
+          # filename = match.group(1)
+          startCnum = int(match.group(2))
+          endCnum = int(match.group(3))
+          explanation = match.group(4)
 
-        region = sublime.Region(startCnum, endCnum)
-        regions.append(region)
-        html = '<body id="my-plugin-feature"> <style> div.error {padding: 5px; } </style> <div class="error">' + explanation +  '</div> </body>'
-        view.add_phantom("errns", region, html, sublime.LAYOUT_BELOW)
+          region = sublime.Region(startCnum, endCnum)
+          regions.append(region)
+          html = '<body id="my-plugin-feature"> <style> div.error {padding: 5px; } </style> <div class="error">' + explanation +  '</div> </body>'
+          view.add_phantom("errns", region, html, sublime.LAYOUT_BELOW)
 
-
-    view.add_regions('syntaxerror', regions, 'invalid.illegal', 'dot', sublime.DRAW_NO_FILL)
+      view.add_regions('syntaxerror', regions, 'invalid.illegal', 'dot', sublime.DRAW_NO_FILL)
 
 
 packageName = 'Packages/sublime-reason/Reason.sublime-syntax'
@@ -111,13 +112,13 @@ packageName = 'Packages/sublime-reason/Reason.sublime-syntax'
 class NsListener(sublime_plugin.EventListener):
   def on_post_save_async(self, view):
     if view.settings().get('syntax') == packageName:
-      runNsBinary(view, formatBuffer=False)
+      view.run_command('reason_format')
 
-  def on_activated_async(self, view):
-    if view.settings().get('syntax') == packageName:
-      runNsBinary(view, formatBuffer=False)
+  # def on_activated_async(self, view):
+  #   if view.settings().get('syntax') == packageName:
+  #     runNsBinary(view, formatBuffer=False)
 
 class NsfmtCommand(sublime_plugin.TextCommand):
   def run(self, edit):
-    if self.view.settings().get('syntax') == packageName: # check if valid source file
-      runNsBinary(self.view, formatBuffer=True)
+    if self.view.settings().get('syntax') == packageName:
+      view.run_command('reason_format')
