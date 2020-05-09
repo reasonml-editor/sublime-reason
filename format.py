@@ -110,16 +110,14 @@ packageName = 'Packages/sublime-reason/Reason.sublime-syntax'
 
 class NsListener(sublime_plugin.EventListener):
   def on_post_save_async(self, view):
-    # Is this a napkin file?
     if view.settings().get('syntax') == packageName:
-      runNsBinary(view, False) # only show syntax errors
+      runNsBinary(view, formatBuffer=False)
 
   def on_activated_async(self, view):
-    # Is this a napkin file?
     if view.settings().get('syntax') == packageName:
-      runNsBinary(view, False) # only show syntax errors
+      runNsBinary(view, formatBuffer=False)
 
 class NsfmtCommand(sublime_plugin.TextCommand):
   def run(self, edit):
     if self.view.settings().get('syntax') == packageName: # check if valid source file
-      runNsBinary(self.view, True) # show syntax errors + format
+      runNsBinary(self.view, formatBuffer=True)
