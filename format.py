@@ -59,7 +59,7 @@ def findFormatter(view):
         sublime.error_message("Can't find the formatter % s"% formatterExe)
         return None
 
-class ReasonFormatCommand(sublime_plugin.TextCommand):
+class FormatCommand(sublime_plugin.TextCommand):
   def run(self, edit):
     self.view.erase_regions("syntaxerror")
     self.view.erase_phantoms("errns")
@@ -109,16 +109,16 @@ class ReasonFormatCommand(sublime_plugin.TextCommand):
 
 packageName = 'Packages/sublime-reason/Reason.sublime-syntax'
 
-class NsListener(sublime_plugin.EventListener):
-  def on_post_save_async(self, view):
-    if view.settings().get('syntax') == packageName:
-      view.run_command('reason_format')
+# class NsListener(sublime_plugin.EventListener):
+#   def on_post_save_async(self, view):
+#     if view.settings().get('syntax') == packageName:
+#       view.run_command('reason_format')
 
   # def on_activated_async(self, view):
   #   if view.settings().get('syntax') == packageName:
   #     runNsBinary(view, formatBuffer=False)
 
-class NsfmtCommand(sublime_plugin.TextCommand):
-  def run(self, edit):
-    if self.view.settings().get('syntax') == packageName:
-      view.run_command('reason_format')
+# class NsfmtCommand(sublime_plugin.TextCommand):
+#   def run(self, edit):
+#     if self.view.settings().get('syntax') == packageName:
+#       view.run_command('reason_format')
