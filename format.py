@@ -60,7 +60,7 @@ def findFormatter(view):
         return None
 
 class FormatCommand(sublime_plugin.TextCommand):
-  def run(self, edit):
+  def run(self, edit, formatBuffer=True):
     view = self.view
     view.erase_regions("syntaxerror")
     view.erase_phantoms("errns")
@@ -81,7 +81,7 @@ class FormatCommand(sublime_plugin.TextCommand):
     stdout, stderr = proc.communicate(contents.encode())
 
     # if proc.returncode == 0 and formatBuffer:
-    if proc.returncode == 0:
+    if proc.returncode == 0 and formatBuffer:
       view.replace(edit, currentBuffer, stdout.decode())
     else:
       errTxt = stderr.decode()
@@ -110,16 +110,19 @@ class FormatCommand(sublime_plugin.TextCommand):
 
 packageName = 'Packages/sublime-reason/Reason.sublime-syntax'
 
-# class NsListener(sublime_plugin.EventListener):
-#   def on_post_save_async(self, view):
-#     if view.settings().get('syntax') == packageName:
-#       view.run_command('reason_format')
+class NsListener(sublime_plugin.ViewEventListener):
+  def on_pre_save(self):
+    if self.view.settings().get('syntax') == packageName:
+      shouldFormat = sublime.load_settings(SETTINGS_PATH).get('formatOnSave')
+      self.view.run_command('format', {"formatBuffer": shouldFormat or False})
 
-  # def on_activated_async(self, view):
-  #   if view.settings().get('syntax') == packageName:
-  #     runNsBinary(view, formatBuffer=False)
+  def on_activated(self):
+    if self.view.settings().get('syntax') == packageName:
+      self.view.run_command('format', {"formatBuffer": False})
 
-# class NsfmtCommand(sublime_plugin.TextCommand):
-#   def run(self, edit):
-#     if view.settings().get('syntax') == packageName:
-#       view.run_command('reason_format')
+  def on_post_text_command(self, command_name, args):
+    if self.view.settings().get('syntax') == packageName:
+      # write syntax error -> save/format (get syntax error visible) -> undo
+      # re-render all syntax error diagnostics, otherwise you see stale diagnostics
+      if command_name == "undo":
+        self.view.run_command('format', {"formatBuffer": False})
