@@ -116,9 +116,9 @@ class NsListener(sublime_plugin.ViewEventListener):
       shouldFormat = sublime.load_settings(SETTINGS_PATH).get('formatOnSave')
       self.view.run_command('format', {"formatBuffer": shouldFormat or False})
 
-  def on_activated(self):
-    if self.view.settings().get('syntax') == packageName:
-      self.view.run_command('format', {"formatBuffer": False})
+  # def on_activated(self):
+  #   if self.view.settings().get('syntax') == packageName:
+  #     self.view.run_command('format', {"formatBuffer": False})
 
   def on_post_text_command(self, command_name, args):
     if self.view.settings().get('syntax') == packageName:
