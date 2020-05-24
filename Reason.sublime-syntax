@@ -20,7 +20,7 @@ variables:
 contexts:
 
   commentLine:
-    - match: //.+
+    - match: //.*
       # TODO: append with file scope
       scope: comment.line
 

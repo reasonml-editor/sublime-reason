@@ -3,6 +3,9 @@
 // hi
 // ^ source.ml comment.line
 
+   //
+// ^^ source.ml comment.line
+
     /* hello
 //  ^ source.ml comment.block
   world */
