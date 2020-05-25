@@ -120,9 +120,9 @@ class NsListener(sublime_plugin.ViewEventListener):
   #   if self.view.settings().get('syntax') == packageName:
   #     self.view.run_command('format', {"formatBuffer": False})
 
-  def on_post_text_command(self, command_name, args):
-    if self.view.settings().get('syntax') == packageName:
-      # write syntax error -> save/format (get syntax error visible) -> undo
-      # re-render all syntax error diagnostics, otherwise you see stale diagnostics
-      if command_name == "undo":
-        self.view.run_command('format', {"formatBuffer": False})
+  # def on_post_text_command(self, command_name, args):
+  #   if self.view.settings().get('syntax') == packageName:
+  #     # write syntax error -> save/format (get syntax error visible) -> undo
+  #     # re-render all syntax error diagnostics, otherwise you see stale diagnostics
+  #     if command_name == "undo":
+  #       self.view.run_command('format', {"formatBuffer": False})
