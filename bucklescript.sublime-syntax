@@ -1,0 +1,276 @@
+%YAML 1.2
+---
+name: BuckleScript
+file_extensions: [res, resi]
+scope: source.bucklescript
+
+variables:
+  # copied over from reason-highlightjs
+  # TODO: \"foo" ident
+  RE_IDENT: '[a-z_][0-9a-zA-Z_]*'
+  RE_ATTRIBUTE: '[A-Za-z_][A-Za-z0-9_\.]*'
+  RE_MODULE_IDENT: '[A-Z_][0-9a-zA-Z_]*'
+
+  # slightly different than reason-highlightjs
+  RE_KEYWORDS:
+    \b(and|as|assert|begin|class|constraint|done|downto|exception|external|fun|functor|inherit|lazy|let|pub|mutable|new|nonrec|object|of|or|pri|rec|then|to|val|virtual|try|catch|finally|do|else|for|if|switch|while|import|library|export|module|in|raise|private)\b
+  RE_LITERAL: \b(true|false)\b
+
+contexts:
+
+  commentLine:
+    - match: //.*
+      # TODO: append with file scope
+      scope: comment.line
+
+  commentBlock:
+    - match: /\*
+      push:
+        - meta_scope: comment.block
+        - match: \*/
+          pop: true
+
+  punctuations:
+    - match: ~
+      scope: punctuation.definition.keyword
+    - match: ;
+      scope: punctuation.terminator
+    - match: \.
+      scope: punctuation.accessor
+    - match: \,
+      scope: punctuation.separator
+    # covers ternary. Wrong category but whatever
+    - match: '\?|:'
+      scope: punctuation.separator
+    - match: \|(?!\|)
+      scope: punctuation.separator
+    - match: \{
+      scope: punctuation.section.braces.begin
+    - match: \}
+      scope: punctuation.section.braces.end
+    - match: \(
+      scope: punctuation.section.parens.begin
+    - match: \)
+      scope: punctuation.section.parens.end
+
+  storage:
+    - match: \btype\b
+      scope: storage.type
+
+  keyword:
+    - match: '{{RE_KEYWORDS}}'
+      scope: keyword
+
+  constant:
+    - match: '{{RE_LITERAL}}'
+      scope: constant.language
+
+  string:
+    - match: '"'
+      scope: punctuation.definition.string.begin
+      push:
+      - meta_scope: string.quoted.double
+      - match: \\.
+        scope: constant.character.escape
+      - match: '"'
+        scope: punctuation.definition.string.end
+        pop: true
+    - match: '({{RE_IDENT}})?(`)'
+      captures:
+        1: variable.annotation
+        2: punctuation.definition.string.begin
+      push:
+        # different than reason-highlightjs, for now
+        - meta_scope: string.quoted.other
+        - match: '`'
+          scope: punctuation.definition.string.end
+          pop: true
+
+  function:
+    - match: =>
+      # first one is apparently for backward-compat
+      scope: storage.type.function keyword.declaration.function
+
+  character:
+    - match: '''[\x00-\x7F]'''
+      scope: string.quoted.single
+
+  number:
+    - match:
+        \b(0[xX][a-fA-F0-9_]+[Lln]?|0[oO][0-7_]+[Lln]?|0[bB][01_]+[Lln]?|[0-9][0-9_]*([Lln]|(\.[0-9_]+)?([eE][-+]?[0-9_]+)?)?)\b
+      scope: constant.numeric
+
+  operator:
+    - match:
+        '->|\|\||&&|\+\+|\*\*|\+\.|\+|-\.|-|\*\.|\*|/\.|/|\.\.\.|\.\.|\|>|===|==|\^|:=|!|>=|<='
+      scope: keyword.operator
+
+  assignment:
+    - match: '='
+      scope: keyword.operator.assignment
+
+  # doesn't contain ` unlike reason-highlightjs
+  constructor:
+    - match: '\b[A-Z][0-9a-zA-Z_]*\b'
+      # won't mark and highlight this for now. This often shares the same
+      # highlighting as entity.name.namespace (our module). We don't want
+      # variant and modules confused
+      # scope: entity.name.union
+      scope: variable.function variable.other
+    - match: '(#)[a-zA-Z][0-9a-zA-Z_]*\b'
+      captures:
+        1: punctuation.definition.keyword
+
+  array:
+    - match: '\['
+      scope: punctuation.section.brackets.begin
+    - match: '\]'
+      scope: punctuation.section.brackets.end
+
+  list:
+    - match: '\b(list)(\[)'
+      captures:
+        1: keyword
+        2: punctuation.section.brackets.begin
+    - match: '\]'
+      scope: punctuation.section.brackets.end
+
+  objectAccess:
+    - match: '\b{{RE_IDENT}}(\[)'
+      captures:
+        # technically this should be punctuation.accessor. But we don't wrap
+        # the section, so we'll just conform to list and array brackets
+        1: punctuation.section.brackets.begin
+    - match: '\]'
+      scope: punctuation.section.brackets.end
+
+  attribute:
+    - match: '@@?'
+      scope: storage.modifier punctuation.definition.annotation
+      push: attributeContent
+    - match: '%%?'
+      scope: storage.modifier punctuation.definition.annotation
+      push: attributeContent
+  attributeContent:
+    - meta_scope: meta.annotation
+    # - match: '{{RE_ATTRIBUTE}} *\('
+    #   scope: variable.annotation
+    #   push:
+    #     - match: \)
+    #     pop: true
+    - match: '{{RE_ATTRIBUTE}}'
+      scope: variable.annotation
+      pop: true
+
+  jsx:
+    - match: '<>|</>|/>'
+    - match: '</({{RE_MODULE_IDENT}})'
+      captures:
+        1: entity.name.namespace
+      push: moduleAccessEndsWithModuleThenPop
+    - match: '</({{RE_IDENT}})'
+    # overloaded: if a <Foo.bar
+    # fortunately, still the right category
+    - match: '<({{RE_MODULE_IDENT}})'
+      captures:
+        1: entity.name.namespace
+      push: moduleAccessEndsWithModuleThenPop
+
+  openOrIncludeModule:
+    - match: '\b(open|include)\s*'
+      scope: keyword
+      push: moduleAccessEndsWithModuleThenPop
+
+  # Foo.Bar.Baz where Baz is actually a module, not a constructor
+  moduleAccessEndsWithModule:
+    - match: '{{RE_MODULE_IDENT}}'
+      scope: entity.name.namespace
+    - match: '(\.)({{RE_MODULE_IDENT}})'
+      captures:
+        1: punctuation.accessor
+        2: entity.name.namespace
+
+  moduleAccessEndsWithModuleThenPop:
+    - include: moduleAccessEndsWithModule
+    - match: '(?=\S)'
+      pop: true
+
+  moduleAccess:
+    - match: '\b({{RE_MODULE_IDENT}})(\.)'
+      captures:
+        1: entity.name.namespace
+        2: punctuation.accessor
+
+  functorParameter:
+    - match: \(
+      push: functorParameter
+      scope: punctuation.section.braces.begin
+    - match: \)
+      scope: punctuation.section.braces.end
+      pop: true
+    - include: moduleAccessEndsWithModule
+    - include: main
+
+  moduleRHS:
+    - include: functorParameter
+    # this is what makes us bail out of the current stack
+    # module Foo = (Bar: Baz) => (Bar: Baz) => List
+    # Bar Bar
+    # Bar
+    # let a = Bar
+    #     ^ bail! Now this is bailing way too late, but that's ok for now
+    - match: '(?=\S)'
+      pop: true
+
+  moduleDeclaration:
+    - match: '\b(module)\s+(type\s+)?(of\s+)?({{RE_MODULE_IDENT}})'
+      captures:
+        1: keyword
+        2: keyword
+        3: keyword
+        4: entity.name.namespace
+      push:
+        # and then an optional type signature is matched. Hopefully this regex
+        # doesn't accidentally match something else
+        - match: '\s*:\s*({{RE_MODULE_IDENT}})'
+          captures:
+            1: entity.name.namespace
+        - match: '\s*:\s*(\{)'
+          captures:
+            1: punctuation.section.braces.begin
+          push: moduleInner
+        - match: '='
+          set: moduleRHS
+        - match: '(?=\S)'
+          pop: true
+
+  moduleInner:
+    - match: \}
+      scope: punctuation.section.braces.end
+      pop: true
+    - include: main
+
+  main:
+    - include: storage
+    - include: constant
+    # these below are basically like reason-highlightjs
+    - include: commentLine
+    - include: commentBlock
+    - include: character
+    - include: string
+    - include: attribute
+    - include: function
+    - include: list
+    - include: objectAccess
+    - include: array
+    - include: jsx
+    - include: operator
+    - include: assignment
+    - include: number
+    - include: openOrIncludeModule
+    - include: moduleDeclaration
+    - include: moduleAccess
+    - include: constructor
+    # this is different than reason-highlightjs too
+    - include: keyword
+    - include: punctuations
